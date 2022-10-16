@@ -10,6 +10,7 @@ class TicketControl extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      mainTicketList: [],
       formVisibleOnPage: false,
       debuggingLesson: false,
       pair: false,
@@ -17,7 +18,15 @@ class TicketControl extends React.Component {
     }; //default state of application is that the new ticket form is not visible
   }
 
-  handleClick = () => { //arrow notation binds it to it's lexical scope, specifically binds it to what "this" refers to when handleClick is called on a event listener that is created after this scope of code.
+  handleAddingNewTicketToList = (newTicket) => {
+    const newMainTicketList = this.state.mainTicketList.concat(newTicket);//push alters array, concat creates new array-- concat is more functional
+    this.setState({
+      mainTicketList: newMainTicketList,
+      formVisibleOnPage: false 
+    });
+  }
+
+  handleAddTicketClick = () => { //arrow notation binds it to it's lexical scope, specifically binds it to what "this" refers to when handleClick is called on a event listener that is created after this scope of code.
     //this.setState({formVisibleOnPage: true}); w/o referring to previous state
     this.setState(prevState => ({
       formVisibleOnPage: !prevState.formVisibleOnPage//We pass in the current state of the formVisibleOnPage boolean to prevState. Now that we know this value, we can say the new state should be !prevState.formVisibleOnPage (the opposite of the old state).
@@ -27,24 +36,24 @@ class TicketControl extends React.Component {
   ////The whole point of setState() is to allow React to do its job — which is to be a state management system that efficiently creates a virtual DOM and reconciles it with the actual DOM. 
   //The main issue with manipulating state directly like this: this.state = {property: update}, is that it will not cause the component to re-render as setState() would. If the component doesn't re-render, our changes to state won't create any change in the DOM. Always use the setState() method to update state in a pure React application.
 
-  debuggingYesClick = () => {
+  handleDebuggingYesClick = () => {
     this.setState(prevState => ({
       debuggingLesson: !prevState.debuggingLesson
     }));
   }
-  pairYesClick = () => {
+  handlePairYesClick = () => {
     this.setState(prevState => ({
       pair: !prevState.pair
     }));
   }
 
-  fifteenMinsYesClick = () => {
+  handleFifteenMinsYesClick = () => {
     this.setState(prevState => ({
       fifteenMins: !prevState.fifteenMins
     }));
   }
 
-  resetFormChecks = () => {
+  handleResetClick = () => {
     this.setState({formVisibleOnPage: false, debuggingLesson: false, pair: false, fifteenMins: false});
   }
 
@@ -57,27 +66,27 @@ class TicketControl extends React.Component {
       if (!this.state.debuggingLesson){
         currentlyVisibleState = <DebuggingLesson />;
         buttonText = "Yes!";
-        button = <button onClick={this.debuggingYesClick}>{buttonText}</button>;
-        noButton = <button onClick={this.resetFormChecks}>No</button>;
+        button = <button onClick={this.handleDebuggingYesClick}>{buttonText}</button>;
+        noButton = <button onClick={this.handleResetClick}>No</button>;
       } else if(!this.state.pair){
         currentlyVisibleState = <AskPair />;
         buttonText = "Yes!";
-        button = <button onClick={this.pairYesClick}>{buttonText}</button>;
-        noButton = <button onClick={this.resetFormChecks}>No</button>;
+        button = <button onClick={this.handlePairYesClick}>{buttonText}</button>;
+        noButton = <button onClick={this.handleResetClick}>No</button>;
       } else if(!this.state.fifteenMins){
         currentlyVisibleState = <FifteenMins />;
         buttonText = "Yes!";
-        button = <button onClick={this.fifteenMinsYesClick}>{buttonText}</button>;
-        noButton = <button onClick={this.resetFormChecks}>No</button>;
+        button = <button onClick={this.handleFifteenMinsYesClick}>{buttonText}</button>;
+        noButton = <button onClick={this.handleResetClick}>No</button>;
       } else {
-        currentlyVisibleState = <NewTicketForm />;
+        currentlyVisibleState = <NewTicketForm onNewTicketCreation={this.handleAddingNewTicketToList} />; //pass our parent method to our child component as a property called 'onNewTicketCreation'. This differentiates the method in our parent component (which will actually handle the event) from the function in our child component (which is triggered when the event happens).
         buttonText = "Return to Ticket List";
-        button = <button onClick={this.resetFormChecks}>{buttonText}</button>;
+        button = <button onClick={this.handleResetClick}>{buttonText}</button>;
       }
     } else {
-      currentlyVisibleState = <TicketList />
+      currentlyVisibleState = <TicketList ticketList={this.state.mainTicketList} />;//passing mainTicketList into the child component as a property.
       buttonText = "Add Ticket";
-      button = <button onClick={this.handleClick}>{buttonText}</button>;
+      button = <button onClick={this.handleAddTicketClick}>{buttonText}</button>;
     }
     return ( //JSX inside return and JS outside
       <React.Fragment>
