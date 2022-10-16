@@ -1,6 +1,6 @@
 import React from "react";
 
-function debuggingLesson(props){
+function DebuggingLesson(props){
   return (
     <React.Fragment>
       <h3>"Have you gone through all the steps on the Learn How to Program debugging lesson?"</h3>
@@ -8,4 +8,4 @@ function debuggingLesson(props){
   );
 }
 
-export default NewTicketForm;
+export default DebuggingLesson;
