@@ -27,10 +27,11 @@ function TicketList(){
         <Ticket names={ticket.names}
           location={ticket.location}
           issue={ticket.issue}
-          key={index}/>
+          key={index}/> //each child in an array or itterator should have a unique "key" prop. It makes our application more efficient because it helps React differentiate between similar components.
       )}
     </React.Fragment>
   );
 }
 
 export default TicketList;
+

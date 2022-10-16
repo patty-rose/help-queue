@@ -1,5 +1,7 @@
+/* index.css is for GLOBAL STYLES. But both index.css and app.css will be minified into a single css file when compiled. So components can default to the wrong style based on both global and app.css stylesheets, unfortunately. Some rules for STYLESHEETS: -all global styles go in index.css -it is not recommended to use styles for individual components, but if done make sure ids very specifically pinpoint elements -some animations and pseudo class selectors (like hover) can't be implemented with recommended practices like CSS objects - so stylesheets may be an acceptable option*/
+
 body {
-  margin: 0;
+  margin: 50;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
