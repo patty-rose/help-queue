@@ -6,11 +6,14 @@ function TicketList(props){
   return (
     <React.Fragment>
       <hr/>
-      {props.ticketList.map((ticket, index) =>
-        <Ticket names={ticket.names}
+      {props.ticketList.map((ticket) =>
+        <Ticket
+          whenTicketClicked = { props.onTicketSelection }
+          names={ticket.names}
           location={ticket.location}
           issue={ticket.issue}
-          key={index}/> //each child in an array or itterator should have a unique "key" prop. It makes our application more efficient because it helps React differentiate between similar components.
+          id={ticket.id}
+          key={ticket.id}/> //each child in an array or itterator should have a unique "key" prop. It makes our application more efficient because it helps React differentiate between similar components.
       )}
     </React.Fragment>
   );
@@ -18,7 +21,8 @@ function TicketList(props){
 
 // Add propTypes for ticketList.
 TicketList.propTypes = {
-  ticketList: PropTypes.array
+  ticketList: PropTypes.array,
+  onTicketSelection: PropTypes.func
 };
 
 export default TicketList;
