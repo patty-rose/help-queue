@@ -6,7 +6,7 @@ function TicketList(props){
   return (
     <React.Fragment>
       <hr/>
-      {props.ticketList.map((ticket) =>
+      {Object.values(props.ticketList).map((ticket) => //the Object.values() method grabs all the values from the object. Once we have the values, we can map over them.
         <Ticket
           whenTicketClicked = { props.onTicketSelection }
           names={ticket.names}
@@ -21,7 +21,7 @@ function TicketList(props){
 
 // Add propTypes for ticketList.
 TicketList.propTypes = {
-  ticketList: PropTypes.array,
+  ticketList: PropTypes.object,
   onTicketSelection: PropTypes.func
 };
 

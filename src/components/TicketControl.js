@@ -6,16 +6,19 @@ import AskPair from './AskPair';
 import FifteenMins from './FifteenMins';
 import TicketDetail from './TicketDetail';
 import EditTicketForm from './EditTicketForm';
+import PropTypes from "prop-types";
+
+import { connect } from 'react-redux';//for redux and connecting this component to our store
 
 class TicketControl extends React.Component {
 
   constructor(props) {
     super(props);
+    console.log(props);
     this.state = {
-      mainTicketList: [], //shared state
+      formVisibleOnPage: false, //local state
       selectedTicket: null,
       editing: false,
-      formVisibleOnPage: false, //local state
       debuggingLesson: false,
       pair: false,
       fifteenMins: false, 
@@ -33,17 +36,23 @@ class TicketControl extends React.Component {
   //The main issue with manipulating state directly like this: this.state = {property: update}, is that it will not cause the component to re-render as setState() would. If the component doesn't re-render, our changes to state won't create any change in the DOM. Always use the setState() method to update state in a pure React application.
 
   handleAddingNewTicketToList = (newTicket) => {
-    const newMainTicketList = this.state.mainTicketList.concat(newTicket);//push alters array, concat creates new array-- concat is more functional
-    this.setState({
-      mainTicketList: newMainTicketList,
-      formVisibleOnPage: false 
-    });
+    const { dispatch } = this.props;
+    const { id, names, location, issue } = newTicket;
+    const action = {
+      type: 'ADD_TICKET',
+      id: id,
+      names: names,
+      location: location,
+      issue: issue,
+    }
+    dispatch(action);//This automatically dispatches our action and updates the store 
+    this.setState({formVisibleOnPage: false});
   }
 
   handleChangingSelectedTicket = (id) => {
-    const selectedTicket = this.state.mainTicketList.filter(ticket => ticket.id === id)[0];
+    const selectedTicket = this.props.mainTicketList[id];
     this.setState({selectedTicket: selectedTicket});
-  }
+  }//This is the power of mapStateToProps: we don't have to do any fancy additional code to get a specific state slice from the store. We can just use this.props — as long as we've defined the state slice we want to map in our mapStateToProps function literal.
 
   handleEditClick = () => {
     console.log("handleEditClick reached!");
@@ -51,22 +60,30 @@ class TicketControl extends React.Component {
   }
 
   handleEditingTicketInList = (ticketToEdit) => {
-    const editedMainTicketList = this.state.mainTicketList
-      .filter(ticket => ticket.id !== this.state.selectedTicket.id)
-      .concat(ticketToEdit);
+    const { dispatch } = this.props;
+    const { id, names, location, issue } = ticketToEdit;
+    const action = {
+      type: 'ADD_TICKET',
+      id: id,
+      names: names,
+      location: location,
+      issue: issue,
+    }
+    dispatch(action);
     this.setState({
-        mainTicketList: editedMainTicketList,
-        editing: false,
-        selectedTicket: null
-      });
+      editing: false,
+      selectedTicket: null
+    });
   }
 
   handleDeletingTicket = (id) => {
-    const newMainTicketList = this.state.mainTicketList.filter(ticket => ticket.id !== id);
-    this.setState({
-      mainTicketList: newMainTicketList,
-      selectedTicket: null
-    });
+    const { dispatch } = this.props;
+    const action = {
+      type: 'DELETE_TICKET',
+      id: id
+    }
+    dispatch(action);
+    this.setState({selectedTicket: null});
   }
 
   handleDebuggingYesClick = () => {
@@ -126,7 +143,7 @@ class TicketControl extends React.Component {
         button = <button onClick={this.handleResetClick}>{buttonText}</button>;
       }
     } else {
-      currentlyVisibleState = <TicketList ticketList={this.state.mainTicketList} onTicketSelection={this.handleChangingSelectedTicket} />;//passing mainTicketList into the child component as a property.
+      currentlyVisibleState = <TicketList ticketList={this.props.mainTicketList} onTicketSelection={this.handleChangingSelectedTicket} />;//passing mainTicketList into the child component as a property.
       buttonText = "Add Ticket";
       button = <button onClick={this.handleAddTicketClick}>{buttonText}</button>;
     }
@@ -143,6 +160,24 @@ class TicketControl extends React.Component {
   }
 
 }
+
+TicketControl.propTypes = {
+  mainTicketList: PropTypes.object
+};
+
+const mapStateToProps = state => {
+  return {
+    mainTicketList: state//// Key-value pairs of state to be mapped from Redux to React component go here.
+  }
+}
+
+// The key-value pairs determine the state slices that should be mapped to the component's props. In our case, we want mainTicketList from the store to be mapped to TicketControl's props.
+
+// Then we need to pass our newly-defined mapStateToProps function into the connect() function:
+
+TicketControl = connect(mapStateToProps)(TicketControl);//// Note: we are now passing mapStateToProps into the connect() function.
+//using that connet to connect this comp to Redux and our Redux store. it's important that connect() is called right before we export TicketControl. That ensures that the component that's exported has all necessary React Redux functionality.
+
 
 export default TicketControl;
 
