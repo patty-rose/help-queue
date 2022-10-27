@@ -1,7 +1,7 @@
-import rootReducer from '../reducers/index';
+import rootReducer from '../../reducers/index';
 import { createStore } from 'redux';
-import formVisibleReducer from './../reducers/form-visible-reducer';
-import ticketListReducer from './../reducers/ticket-list-reducer';
+import formVisibleReducer from '../../reducers/form-visible-reducer';
+import ticketListReducer from '../../reducers/ticket-list-reducer';
 
 let store = createStore(rootReducer);//we are creating a little Redux application in our tests that is separate from our React application. We are creating a store so we can dispatch a few actions and check that our reducers are working together.
 

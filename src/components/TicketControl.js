@@ -16,7 +16,6 @@ class TicketControl extends React.Component {
     super(props);
     console.log(props);
     this.state = {
-      formVisibleOnPage: false, //local state
       selectedTicket: null,
       editing: false,
       debuggingLesson: false,
@@ -25,13 +24,28 @@ class TicketControl extends React.Component {
     }; //default state of application is that the new ticket form is not visible
   }
 
-  handleAddTicketClick = () => { //arrow notation binds it to it's lexical scope, specifically binds it to what "this" refers to when handleClick is called on a event listener that is created after this scope of code.
-    //this.setState({formVisibleOnPage: true}); w/o referring to previous state
-    this.setState(prevState => ({
-      formVisibleOnPage: !prevState.formVisibleOnPage//We pass in the current state of the formVisibleOnPage boolean to prevState. Now that we know this value, we can say the new state should be !prevState.formVisibleOnPage (the opposite of the old state).
-
-    }));//In its simplest form, setState() takes an object as an argument. The object contains any key-value pairs that our application should update.
+  handleClick = () => {
+    if (this.state.selectedTicket != null) {
+      this.setState({
+        selectedTicket: null,
+        editing: false
+      });
+    } else {
+      const { dispatch } = this.props;
+      const action = {
+        type: 'TOGGLE_FORM'
+      }
+      dispatch(action);
+    }
   }
+  
+  // handleAddTicketClick = () => { //arrow notation binds it to it's lexical scope, specifically binds it to what "this" refers to when handleClick is called on a event listener that is created after this scope of code.
+  //   //this.setState({formVisibleOnPage: true}); w/o referring to previous state
+  //   this.setState(prevState => ({
+  //     formVisibleOnPage: !prevState.formVisibleOnPage//We pass in the current state of the formVisibleOnPage boolean to prevState. Now that we know this value, we can say the new state should be !prevState.formVisibleOnPage (the opposite of the old state).
+
+  //   }));//In its simplest form, setState() takes an object as an argument. The object contains any key-value pairs that our application should update.
+  // }
   ////The whole point of setState() is to allow React to do its job — which is to be a state management system that efficiently creates a virtual DOM and reconciles it with the actual DOM. 
   //The main issue with manipulating state directly like this: this.state = {property: update}, is that it will not cause the component to re-render as setState() would. If the component doesn't re-render, our changes to state won't create any change in the DOM. Always use the setState() method to update state in a pure React application.
 
@@ -46,7 +60,11 @@ class TicketControl extends React.Component {
       issue: issue,
     }
     dispatch(action);//This automatically dispatches our action and updates the store 
-    this.setState({formVisibleOnPage: false});
+    // this.setState({formVisibleOnPage: false});
+    const action2 = {
+      type: 'TOGGLE_FORM'
+    }
+    dispatch(action2);
   }
 
   handleChangingSelectedTicket = (id) => {
@@ -104,7 +122,7 @@ class TicketControl extends React.Component {
   }
 
   handleResetClick = () => {
-    this.setState({formVisibleOnPage: false, debuggingLesson: false, pair: false, fifteenMins: false, selectedTicket: null, editing: false});
+    this.setState({ debuggingLesson: false, pair: false, fifteenMins: false, selectedTicket: null, editing: false});
   }
 
   render(){ //class components always need a render method
@@ -121,7 +139,7 @@ class TicketControl extends React.Component {
       buttonText = "Return to Ticket List";
       button = <button onClick={this.handleResetClick}>{buttonText}</button>;
       // While our TicketDetail component only takes placeholder data, we will eventually be passing the value of selectedTicket as a prop.
-    } else if (this.state.formVisibleOnPage) {
+    } else if (this.props.formVisibleOnPage) {
       if (!this.state.debuggingLesson){
         currentlyVisibleState = <DebuggingLesson />;
         buttonText = "Yes!";
@@ -162,12 +180,14 @@ class TicketControl extends React.Component {
 }
 
 TicketControl.propTypes = {
-  mainTicketList: PropTypes.object
+  mainTicketList: PropTypes.object,
+  formVisibleOnPage: PropTypes.bool
 };
 
 const mapStateToProps = state => {
   return {
-    mainTicketList: state//// Key-value pairs of state to be mapped from Redux to React component go here.
+    mainTicketList: state.mainTicketList,
+    formVisibleOnPage: state.formVisibleOnPage//// Key-value pairs of state to be mapped from Redux to React component go here.
   }
 }
 

@@ -5,10 +5,11 @@ import App from './components/App';
 import reportWebVitals from './reportWebVitals';
 
 import { createStore } from 'redux';
-import reducer from './reducers/ticket-list-reducer'; 
+// import reducer from './reducers/ticket-list-reducer'; 
 import { Provider } from 'react-redux';//all these imports to use Redux
+import rootReducer from './reducers/index';
 
-const store = createStore(reducer);//instantiate Redux store //we are passing our reducer into the createStore function. That means the store constant is a Redux store that knows how to handle the actions we've defined in our reducer.
+const store = createStore(rootReducer);//instantiate Redux store //we are passing our reducer into the createStore function. That means the store constant is a Redux store that knows how to handle the actions we've defined in our reducer.
 
 store.subscribe(() =>
   console.log(store.getState())
