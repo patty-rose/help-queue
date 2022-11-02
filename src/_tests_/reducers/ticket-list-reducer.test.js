@@ -34,25 +34,25 @@ describe('ticketListReducer', () => {
     // our reducer will take two arguments. The first argument is the current state while the second argument is an action that will be applied to the current state. Note that the action's type is stored inside an object. This object can potentially contain other things besides the name of the action itself. We will cover this further in the next lesson.
   });
 
-  test('Should successfully add new ticket data to mainTicketList', () => {
-    const { names, location, issue, id } = ticketData;//use ES6 destructuring syntax to provide keys from our ticketData
-    action = {//our reducer takes an object as an argument instead of just a string for the action type itself. Because it takes an object, it can take multiple key-value pairs that include additional information about the action the reducer will need to take.
-      type: 'ADD_TICKET',
-      names: names,
-      location: location,
-      issue: issue,
-      id: id
-    };
+  // test('Should successfully add new ticket data to mainTicketList', () => {
+  //   const { names, location, issue, id } = ticketData;//use ES6 destructuring syntax to provide keys from our ticketData
+  //   action = {//our reducer takes an object as an argument instead of just a string for the action type itself. Because it takes an object, it can take multiple key-value pairs that include additional information about the action the reducer will need to take.
+  //     type: 'ADD_TICKET',
+  //     names: names,
+  //     location: location,
+  //     issue: issue,
+  //     id: id
+  //   };
 
-    expect(ticketListReducer({}, action)).toEqual({
-      [id] : {
-        names: names,
-        location: location,
-        issue: issue,
-        id: id
-      }
-    });
-  });
+  //   expect(ticketListReducer({}, action)).toEqual({
+  //     [id] : {
+  //       names: names,
+  //       location: location,
+  //       issue: issue,
+  //       id: id
+  //     }
+  //   });
+  // });
 
   test('Should successfully delete a ticket', () => {
     action = {
@@ -87,4 +87,29 @@ describe('ticketListReducer', () => {
       }
     });
   });
+
+  test('should successfully add a ticket to the ticket list that includes date-fns-formatted wait times', () => {
+    const { names, location, issue, timeOpen, formattedWaitTime, id } = ticketData;
+    action = {
+      type: 'ADD_TICKET',
+      names: names,
+      location: location,
+      issue: issue,
+      timeOpen: timeOpen,
+      formattedWaitTime: formattedWaitTime,
+      id: id
+    };
+    expect(ticketListReducer({}, action)).toEqual({
+      [id] : {
+        names: names,
+        location: location,
+        issue: issue,
+        timeOpen: timeOpen,
+        formattedWaitTime: 'less than a minute ago',
+        id: id
+      }
+    });
+  });
+
+
 });
