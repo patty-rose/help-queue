@@ -37,6 +37,7 @@ class TicketControl extends React.Component {
       }
       dispatch(action);
     }
+    console.log(this.props);
   }
   
   // handleAddTicketClick = () => { //arrow notation binds it to it's lexical scope, specifically binds it to what "this" refers to when handleClick is called on a event listener that is created after this scope of code.
@@ -163,7 +164,7 @@ class TicketControl extends React.Component {
     } else {
       currentlyVisibleState = <TicketList ticketList={this.props.mainTicketList} onTicketSelection={this.handleChangingSelectedTicket} />;//passing mainTicketList into the child component as a property.
       buttonText = "Add Ticket";
-      button = <button onClick={this.handleAddTicketClick}>{buttonText}</button>;
+      button = <button onClick={this.handleClick}>{buttonText}</button>;
     }
 
     return ( //JSX inside return and JS outside

@@ -13,7 +13,7 @@ const reducer = (state = {}, action) => {//
         id: id
       }
     });
-    case 'DELETE_TICKET':
+  case 'DELETE_TICKET':
     let newState = { ...state };//make a copy of state
     delete newState[id];//delete tic from copy
     return newState;
