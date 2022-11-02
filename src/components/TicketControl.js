@@ -10,6 +10,8 @@ import PropTypes from "prop-types";
 
 import { connect } from 'react-redux';//for redux and connecting this component to our store
 
+import { formatDistanceToNow } from 'date-fns';
+
 class TicketControl extends React.Component {
 
   constructor(props) {
@@ -23,7 +25,31 @@ class TicketControl extends React.Component {
       fifteenMins: false, 
     }; //default state of application is that the new ticket form is not visible
   }
+  
 
+  //lifecycle functions:
+  componentDidMount() {
+    this.waitTimeUpdateTimer = setInterval(() => 
+    this.updateTicketElapsedWaitTime(),
+    1000
+    );
+  }
+
+  
+  componentDidUpdate() {
+    console.log("component updated!");
+  }
+
+  componentWillUnmount(){
+    console.log("component unmounted!");
+    clearInterval(this.waitTimeUpdateTimer);
+  }
+
+  updateTicketElapsedWaitTime = () => {
+    console.log("tick");
+  }
+
+  //ticket handlers etc.:
   handleClick = () => {
     if (this.state.selectedTicket != null) {
       this.setState({
