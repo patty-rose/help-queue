@@ -2,11 +2,10 @@
 
 import * as c from './../actions/ActionTypes';
 
-
 const reducer = (state = {}, action) => {//
   const { names, location, issue, id, formattedWaitTime, timeOpen } = action;
   switch (action.type) {//our switch will be based on the action.type. Because the action parameter takes an object, need to look at the action's type
-  case 'ADD_TICKET':
+  case c.ADD_TICKET:
     return Object.assign({}, state, {//use Object.assign() to clone the state object. for this to work correctly, Object.assign() must take three arguments: 1. {} empty object as first object means it will clone the object isntead of mutating it. 2. second argument is object that will be cloned-- current state. 3. 3rd argument is the change that will be made to our new copy. 
       [id]: {//creates new key-value pari in state obj. with id as key and value as ticket obj.
         names: names,
@@ -17,12 +16,12 @@ const reducer = (state = {}, action) => {//
         formattedWaitTime: formattedWaitTime
       }
     });
-  case 'DELETE_TICKET':
+  case c.DELETE_TICKET:
     let newState = { ...state };//make a copy of state
     delete newState[id];//delete tic from copy
     return newState;
 
-  case 'UPDATE_TIME':
+  case c.UPDATE_TIME:
     const newTicket = Object.assign({}, state[id], {formattedWaitTime});//we use Object.assign() to grab the ticket that needs to be updated (we use state[id] to do this to get the specific ticket from the list of tickets). Object.assign() makes a copy of this ticket and then adds the formattedWaitTime to it. (Note that {formattedWaitTime} is an object with the formattedWaitTime key-value pair in it.
     const updatedState = Object.assign({}, state, {
       [id]: newTicket

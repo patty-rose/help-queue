@@ -11,6 +11,7 @@ import PropTypes from "prop-types";
 import { connect } from 'react-redux';//for redux and connecting this component to our store
 
 import { formatDistanceToNow } from 'date-fns';
+import * as a from './../actions';
 
 class TicketControl extends React.Component {
 
@@ -26,27 +27,34 @@ class TicketControl extends React.Component {
     }; //default state of application is that the new ticket form is not visible
   }
   
+  
 
   //lifecycle functions:
   componentDidMount() {
     this.waitTimeUpdateTimer = setInterval(() => 
     this.updateTicketElapsedWaitTime(),
-    1000
+    60000
     );
   }
 
   
-  componentDidUpdate() {
-    console.log("component updated!");
-  }
+  // componentDidUpdate() {
+  //   console.log("component updated!");
+  // }
 
   componentWillUnmount(){
-    console.log("component unmounted!");
     clearInterval(this.waitTimeUpdateTimer);
   }
 
   updateTicketElapsedWaitTime = () => {
-    console.log("tick");
+    const { dispatch } = this.props;
+    Object.values(this.props.mainTicketList).forEach(ticket => {
+      const newFormattedWaitTime = formatDistanceToNow(ticket.timeOpen, {
+          addSuffix: true
+        });
+      const action = a.updateTime(ticket.id, newFormattedWaitTime);
+      dispatch(action);
+    });
   }
 
   //ticket handlers etc.:
@@ -58,9 +66,7 @@ class TicketControl extends React.Component {
       });
     } else {
       const { dispatch } = this.props;
-      const action = {
-        type: 'TOGGLE_FORM'
-      }
+      const action = a.toggleForm();
       dispatch(action);
     }
     console.log(this.props);

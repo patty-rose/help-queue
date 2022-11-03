@@ -8,6 +8,7 @@ function Ticket(props){//props as an argument gives us access to the props in th
         {/* Because TicketList is iterating through each individual ticket, each ticket will have its own div with an onClick handler attached. The arrow function with an anonymous function allows us to invoke the click handler when the user clicks it, and not when rendered. */}
         <h3>{props.location} - {props.names}</h3>
         <p><em>{props.issue}</em></p>
+        <p><em>{props.formattedWaitTime}</em></p>
         <hr/>
       </div>
     </React.Fragment>
@@ -21,7 +22,8 @@ Ticket.propTypes = { //format to declare prop types-- requires import PropTypes 
   location: PropTypes.string,
   issue: PropTypes.string,
   id: PropTypes.string,
-  whenTicketClicked: PropTypes.func //event handler function passed down from TicketControl through TicketList
+  whenTicketClicked: PropTypes.func, //event handler function passed down from TicketControl through TicketList
+  formattedWaitTime: PropTypes.string
 };
 
 // //MyExampleComponent.propTypes = {

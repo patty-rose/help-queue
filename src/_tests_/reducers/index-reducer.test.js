@@ -40,5 +40,5 @@ describe("rootReducer", () => {
     expect(store.getState().formVisibleOnPage).toEqual(formVisibleReducer(undefined, action));
   });
   //In both of these tests, we dispatch an action. We then expect our root reducer to properly handle those actions by passing them into our individual reducers. The store's state slice should be updated accordingly — and should be equal to the return result of the individual reducer that handled the action.
-  
+
 });

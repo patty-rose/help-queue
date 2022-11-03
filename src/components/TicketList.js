@@ -12,6 +12,7 @@ function TicketList(props){
           names={ticket.names}
           location={ticket.location}
           issue={ticket.issue}
+          formattedWaitTime={ticket.formattedWaitTime}
           id={ticket.id}
           key={ticket.id}/> //each child in an array or itterator should have a unique "key" prop. It makes our application more efficient because it helps React differentiate between similar components.
       )}
